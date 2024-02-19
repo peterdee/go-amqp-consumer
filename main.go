@@ -20,7 +20,8 @@ func main() {
 	rabbitMQPassword := os.Getenv("RABBITMQ_PASSWORD")
 	rabbitMQPort := os.Getenv("RABBITMQ_PORT")
 	rabbitMQUser := os.Getenv("RABBITMQ_USER")
-	if rabbitMQPassword == "" || rabbitMQUser == "" {
+	if rabbitMQHost == "" || rabbitMQPassword == "" ||
+		rabbitMQPort == "" || rabbitMQUser == "" {
 		log.Fatal("Could not load RabbitMQ configuration")
 	}
 	rabbitMQConnection, connectionError := amqp.Dial(

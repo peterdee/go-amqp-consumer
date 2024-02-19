@@ -1,5 +1,7 @@
 ## go-amqp-consumer
 
+A microservice that acts as a RabbitMQ consumer that stores values in the database
+
 ### Environment variables
 
 The `.env` file is required, see [.env.example](.env.example)
