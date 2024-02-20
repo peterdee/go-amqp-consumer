@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
-	amqp "github.com/rabbitmq/amqp091-go"
+
+	"go-amqp-consumer/rabbitmq"
 )
 
 func main() {
@@ -15,46 +15,10 @@ func main() {
 		log.Fatal("Could not load .env file!")
 	}
 
-	// Connect to RabbitMQ
-	rabbitMQHost := os.Getenv("RABBITMQ_HOST")
-	rabbitMQPassword := os.Getenv("RABBITMQ_PASSWORD")
-	rabbitMQPort := os.Getenv("RABBITMQ_PORT")
-	rabbitMQUser := os.Getenv("RABBITMQ_USER")
-	if rabbitMQHost == "" || rabbitMQPassword == "" ||
-		rabbitMQPort == "" || rabbitMQUser == "" {
-		log.Fatal("Could not load RabbitMQ configuration")
-	}
-	rabbitMQConnection, connectionError := amqp.Dial(
-		fmt.Sprintf(
-			"amqp://%s:%s@%s:%s/",
-			rabbitMQUser,
-			rabbitMQPassword,
-			rabbitMQHost,
-			rabbitMQPort,
-		),
-	)
-	if connectionError != nil {
-		log.Fatal("Could not connect to RabbitMQ:", connectionError)
-	}
+	rabbitmq.CreateConnection()
 
-	channel, channelError := rabbitMQConnection.Channel()
-	if channelError != nil {
-		log.Fatal(channelError)
-	}
-	rabbitMQQueue, queueError := channel.QueueDeclare(
-		"quotes",
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if queueError != nil {
-		log.Fatal(queueError)
-	}
-
-	messages, consumeError := channel.Consume(
-		rabbitMQQueue.Name,
+	messages, consumeError := rabbitmq.Channel.Consume(
+		rabbitmq.Queue.Name,
 		"",
 		true,
 		false,
@@ -69,7 +33,7 @@ func main() {
 
 	go func() {
 		for message := range messages {
-			fmt.Printf("Received a message: %s", message.Body)
+			fmt.Printf(" -> Received a message:\n%s\n\n", message.Body)
 		}
 	}()
 
