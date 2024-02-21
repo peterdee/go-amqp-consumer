@@ -51,4 +51,6 @@ func CreateConnection() {
 	}
 	Channel = channel
 	Queue = queue
+
+	log.Println("Connected to RabbitMQ")
 }
