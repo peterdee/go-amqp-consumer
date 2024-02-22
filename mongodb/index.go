@@ -15,6 +15,8 @@ var Client *mongo.Client
 
 var Database *mongo.Database
 
+var Quotes *mongo.Collection
+
 func CreateConnection() {
 	connectionString := os.Getenv("MONGODB_CONNECTION_STRING")
 	database := os.Getenv("MONGODB_DATABASE")
@@ -33,15 +35,12 @@ func CreateConnection() {
 	if connectionError != nil {
 		log.Fatal("Could not ping MongoDB:", pingError)
 	}
-	defer func() {
-		if disconnectError := client.Disconnect(ctx); disconnectError != nil {
-			panic(disconnectError)
-		}
-	}()
 
 	Client = client
 
 	Database = Client.Database(database)
+
+	Quotes = Database.Collection("Quotes")
 
 	log.Println("Connected to MongoDB")
 }

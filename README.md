@@ -1,6 +1,8 @@
 ## go-amqp-consumer
 
-A microservice that acts as a RabbitMQ consumer that stores values in the database
+This is a RabbitMQ consumer that stores values in the database
+
+Publisher service: https://github.com/peterdee/go-amqp-publisher
 
 ### Environment variables
 

@@ -1,0 +1,10 @@
+# Directories
+.git/
+.vscode/
+tmp/
+
+# Files
+.env.example
+.gitignore
+LICENSE.md
+README.md
